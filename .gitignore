@@ -1,3 +1,4 @@
 .vscode/
 predict.py
 __pycache__/
+run.py
