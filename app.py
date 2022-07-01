@@ -216,7 +216,7 @@ def app_sst_with_video():
             break
 
         
-def simple_predict(data, mimetype, charset):
+def simple_predict(data):
     """
     Make unstructured predictions on data provided using DataRobot deployment_id provided.
     See docs for details:
