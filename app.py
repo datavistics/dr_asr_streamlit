@@ -67,7 +67,7 @@ def app_sst():
         key="speech-to-text",
         mode=WebRtcMode.SENDONLY,
         audio_receiver_size=1024,
-        # rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
         media_stream_constraints={"video": False, "audio": True},
     )
 
@@ -154,7 +154,7 @@ def app_sst_with_video():
         key="speech-to-text-w-video",
         mode=WebRtcMode.SENDRECV,
         queued_audio_frames_callback=queued_audio_frames_callback,
-        # rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
         media_stream_constraints={"video": True, "audio": True},
     )
 
