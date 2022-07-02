@@ -35,7 +35,6 @@ logger = logging.getLogger(__name__)
 
 proj_dir = Path(__file__).parent
 proj_dir
-model_path = proj_dir/"wav2vec2-base-960h"
 
 
 # This code is based on https://github.com/streamlit/demo-self-driving/blob/230245391f2dda0cb464008195a470751c01770b/streamlit_app.py#L48  # noqa: E501
@@ -86,7 +85,7 @@ def app_sst():
         if webrtc_ctx.audio_receiver:
             sound_chunk = pydub.AudioSegment.empty()
             try:
-                audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=2)
+                audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
             except queue.Empty:
                 time.sleep(0.1)
                 status_indicator.write("No frame arrived.")
@@ -103,9 +102,7 @@ def app_sst():
                 )
                 sound_chunk += sound
             
-            print(f'Got something: {len(sound_chunk)}') 
-
-            if len(sound_chunk) > 20:
+            if len(sound_chunk) > 0:
                 sound_chunk = sound_chunk.set_channels(1).set_frame_rate(SAMPLE_RATE)
                 buffer = np.array(sound_chunk.get_array_of_samples()).astype(np.double)
 
