@@ -7,6 +7,7 @@ import time
 import numpy_serializer as ns
 from collections import deque
 from pathlib import Path
+from pprint import pformat
 from typing import List
 import json
 
@@ -27,6 +28,7 @@ from project_metadata import (
 
 HERE = Path(__file__).parent
 SAMPLE_RATE = 16000
+AUDIO_RECEIVER_SIZE = 2048
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +68,7 @@ def app_sst():
     webrtc_ctx = webrtc_streamer(
         key="speech-to-text",
         mode=WebRtcMode.SENDONLY,
-        audio_receiver_size=1024,
+        audio_receiver_size=AUDIO_RECEIVER_SIZE,
         rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
         media_stream_constraints={"video": False, "audio": True},
     )
@@ -84,8 +86,7 @@ def app_sst():
         if webrtc_ctx.audio_receiver:
             sound_chunk = pydub.AudioSegment.empty()
             try:
-                time.sleep(0.2)
-                audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
+                audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=2)
             except queue.Empty:
                 time.sleep(0.1)
                 status_indicator.write("No frame arrived.")
@@ -104,7 +105,7 @@ def app_sst():
             
             print(f'Got something: {len(sound_chunk)}') 
 
-            if len(sound_chunk) > 0:
+            if len(sound_chunk) > 20:
                 sound_chunk = sound_chunk.set_channels(1).set_frame_rate(SAMPLE_RATE)
                 buffer = np.array(sound_chunk.get_array_of_samples()).astype(np.double)
 
@@ -118,6 +119,9 @@ def app_sst():
                 data = json.dumps(out)
                 text = simple_predict(data)
                 text = json.loads(text.decode())
+                if 'prediction' not in text:
+                    logger.warning(pformat(text))
+                    continue
                 text = text['prediction']
                 if text['text']:
                     text_list = [f"**Text {current_time}:** {text['text']}"] + text_list[:4]
@@ -193,7 +197,7 @@ def app_sst_with_video():
                 )
                 sound_chunk += sound
 
-            if len(sound_chunk) > 0:
+            if len(sound_chunk) > 200:
                 sound_chunk = sound_chunk.set_channels(1).set_frame_rate(SAMPLE_RATE)
                 buffer = np.array(sound_chunk.get_array_of_samples()).astype(np.double)
 
@@ -207,6 +211,9 @@ def app_sst_with_video():
                 data = json.dumps(out)
                 text = simple_predict(data)
                 text = json.loads(text.decode())
+                if 'prediction' not in text:
+                    logger.warning(pformat(text))
+                    continue
                 text = text['prediction']
                 if text['text']:
                     text_list = [f"**Text {current_time}:** {text['text']}"] + text_list[:4]
