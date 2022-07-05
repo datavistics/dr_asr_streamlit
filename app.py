@@ -53,13 +53,20 @@ def main():
 This demo app is using [wav2vec2](https://huggingface.co/facebook/wav2vec2-base-960h) from Facebook,
 an open speech-to-text engine.
 
+![wav2vec2](https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/wav2vec2.png)
+
 I deployed it with DataRobot as an Unstructured [Custom Inference Model](https://docs.datarobot.com/en/docs/mlops/deployment/custom-models/custom-inf-model.html), 
 and wrote a streamlit app hosted by DataRobot's AI Code Apps. 
+
+How to use:
+1. Select the app mode (audio only works a bit better)
+2. Wait for the status to say `Running. Say something!`
+3. Start speaking!
 """
     )
 
-    sound_only_page = "Sound only (sendonly)"
-    with_video_page = "With video (sendrecv)"
+    sound_only_page = "Sound only"
+    with_video_page = "With video"
     app_mode = st.selectbox("Choose the app mode", [sound_only_page, with_video_page])
 
     if app_mode == sound_only_page:
@@ -68,7 +75,6 @@ and wrote a streamlit app hosted by DataRobot's AI Code Apps.
     elif app_mode == with_video_page:
         app_sst_with_video(
         )
-
 
 def app_sst():
     webrtc_ctx = webrtc_streamer(
