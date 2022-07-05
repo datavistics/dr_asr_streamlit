@@ -83,6 +83,7 @@ def app_sst():
 
     while True:
         if webrtc_ctx.audio_receiver:
+            time.sleep(1)
             sound_chunk = pydub.AudioSegment.empty()
             try:
                 audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
