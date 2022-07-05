@@ -30,6 +30,13 @@ HERE = Path(__file__).parent
 SAMPLE_RATE = 16000
 AUDIO_RECEIVER_SIZE = 2048
 
+
+#################
+# Change these
+#################
+TOTAL_LINES = 10
+TIME_TO_COLLECT_AUDIO = 2
+
 logger = logging.getLogger(__name__)
 
 
@@ -83,7 +90,7 @@ def app_sst():
 
     while True:
         if webrtc_ctx.audio_receiver:
-            time.sleep(1)
+            time.sleep(TIME_TO_COLLECT_AUDIO)
             sound_chunk = pydub.AudioSegment.empty()
             try:
                 audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
@@ -122,7 +129,7 @@ def app_sst():
                     continue
                 text = text['prediction']
                 if text['text']:
-                    text_list = [f"**Text {current_time}:** {text['text']}"] + text_list[:4]
+                    text_list = [f"**Text {current_time}:** {text['text']}"] + text_list[:TOTAL_LINES - 1]
                     text_output.markdown('\n\n'.join(reversed(text_list)))
         else:
             status_indicator.write("AudioReciver is not set. Abort.")
