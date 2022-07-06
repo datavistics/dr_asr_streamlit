@@ -8,3 +8,6 @@ Then I connected to it with this app! You can see the custom inference model [he
 
 # Other information
 The biggest challenge by far was getting [streamlit-webrtc](https://github.com/whitphx/streamlit-webrtc) working. 
+
+# Data Encoding
+![Data Encoding](docs/dr_asr_streamlit.png)
