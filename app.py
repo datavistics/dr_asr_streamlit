@@ -64,6 +64,7 @@ How to use:
 1. Select the app mode (`Sound only` works a bit better)
 2. Configure the settings to your liking.
 3. Wait for the status to say `Running. Say something!`
+    - If you get an error `No frame arrived.` you need to choose a different server
 4. Start speaking!
 """
     )
