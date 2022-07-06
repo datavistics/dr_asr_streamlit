@@ -83,7 +83,9 @@ How to use:
     elif app_mode == with_video_page:
         app_sst_with_video()
 
-def app_sst(total_lines, time_to_collect_audio, server):
+def app_sst(total_lines, time_to_collect_audio, server:str):
+    if not server.startswith('stun:'):
+        server = 'stun:' + server
     webrtc_ctx = webrtc_streamer(
         key="speech-to-text",
         mode=WebRtcMode.SENDONLY,
