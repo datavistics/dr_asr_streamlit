@@ -44,7 +44,7 @@ proj_dir = Path(__file__).parent
 proj_dir
 
 server_request = requests.get('https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_hosts.txt')
-server_list = server_request.text.split('\n')
+server_list = ["stun:stun.l.google.com:19302"] + server_request.text.split('\n')
 
 # This code is based on https://github.com/streamlit/demo-self-driving/blob/230245391f2dda0cb464008195a470751c01770b/streamlit_app.py#L48  # noqa: E501
 
@@ -74,21 +74,20 @@ How to use:
 
     total_lines = st.slider("Total Lines printed", 1, 20, TOTAL_LINES, step=1)
     time_to_collect_audio = st.slider("Total Lines printed", 0.2, 5.0, TIME_TO_COLLECT_AUDIO, step = 0.1)
-    # server = st.selectbox("STUN Server: ", )
+    server = st.selectbox("STUN Server: ", server_list)
 
 
     if app_mode == sound_only_page:
-        app_sst(total_lines, time_to_collect_audio)
+        app_sst(total_lines, time_to_collect_audio, server)
     elif app_mode == with_video_page:
         app_sst_with_video()
 
-def app_sst(total_lines, time_to_collect_audio):
+def app_sst(total_lines, time_to_collect_audio, server):
     webrtc_ctx = webrtc_streamer(
         key="speech-to-text",
         mode=WebRtcMode.SENDONLY,
         audio_receiver_size=AUDIO_RECEIVER_SIZE,
-        # rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-        rtc_configuration={"iceServers": [{"urls": [server_list]}]},
+        rtc_configuration={"iceServers": [{"urls": [server]}]},
         media_stream_constraints={"video": False, "audio": True},
     )
 
