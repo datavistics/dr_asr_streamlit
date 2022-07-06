@@ -59,7 +59,7 @@ I deployed it with DataRobot as an Unstructured [Custom Inference Model](https:/
 and wrote a streamlit app hosted by DataRobot's AI Code Apps. 
 
 How to use:
-1. Select the app mode (audio only works a bit better)
+1. Select the app mode (`Sound only` works a bit better)
 2. Wait for the status to say `Running. Say something!`
 3. Start speaking!
 """
