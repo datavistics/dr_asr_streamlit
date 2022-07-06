@@ -74,8 +74,8 @@ How to use:
     app_mode = st.selectbox("Choose the app mode", [sound_only_page, with_video_page])
 
     total_lines = st.slider("Total Lines printed", 1, 20, TOTAL_LINES, step=1)
-    time_to_collect_audio = st.slider("Total Lines printed", 0.2, 5.0, TIME_TO_COLLECT_AUDIO, step = 0.1)
-    server = st.selectbox("STUN Server: ", server_list)
+    time_to_collect_audio = st.slider("Time to collect audio frames", 0.2, 5.0, TIME_TO_COLLECT_AUDIO, step = 0.1)
+    server = st.selectbox("STUN Server: (change if you get No Frame Arrived)", server_list)
 
 
     if app_mode == sound_only_page:
