@@ -43,6 +43,8 @@ logger = logging.getLogger(__name__)
 proj_dir = Path(__file__).parent
 proj_dir
 
+server_request = requests.get('https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_hosts.txt')
+server_list = server_request.text.split('\n')
 
 # This code is based on https://github.com/streamlit/demo-self-driving/blob/230245391f2dda0cb464008195a470751c01770b/streamlit_app.py#L48  # noqa: E501
 
@@ -60,8 +62,9 @@ and wrote a streamlit app hosted by DataRobot's AI Code Apps.
 
 How to use:
 1. Select the app mode (`Sound only` works a bit better)
-2. Wait for the status to say `Running. Say something!`
-3. Start speaking!
+2. Configure the settings to your liking.
+3. Wait for the status to say `Running. Say something!`
+4. Start speaking!
 """
     )
 
@@ -84,7 +87,8 @@ def app_sst(total_lines, time_to_collect_audio):
         key="speech-to-text",
         mode=WebRtcMode.SENDONLY,
         audio_receiver_size=AUDIO_RECEIVER_SIZE,
-        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        # rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        rtc_configuration={"iceServers": [{"urls": [server_list]}]},
         media_stream_constraints={"video": False, "audio": True},
     )
 
