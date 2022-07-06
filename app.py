@@ -69,14 +69,17 @@ How to use:
     with_video_page = "With video"
     app_mode = st.selectbox("Choose the app mode", [sound_only_page, with_video_page])
 
-    if app_mode == sound_only_page:
-        app_sst(
-        )
-    elif app_mode == with_video_page:
-        app_sst_with_video(
-        )
+    total_lines = st.slider("Total Lines printed", 1, 20, TOTAL_LINES, step=1)
+    time_to_collect_audio = st.slider("Total Lines printed", 0.2, 5, TIME_TO_COLLECT_AUDIO, step = 0.1)
+    # server = st.selectbox("STUN Server: ", )
 
-def app_sst():
+
+    if app_mode == sound_only_page:
+        app_sst(total_lines, time_to_collect_audio)
+    elif app_mode == with_video_page:
+        app_sst_with_video()
+
+def app_sst(total_lines, time_to_collect_audio):
     webrtc_ctx = webrtc_streamer(
         key="speech-to-text",
         mode=WebRtcMode.SENDONLY,
@@ -96,7 +99,7 @@ def app_sst():
 
     while True:
         if webrtc_ctx.audio_receiver:
-            time.sleep(TIME_TO_COLLECT_AUDIO)
+            time.sleep(time_to_collect_audio)
             sound_chunk = pydub.AudioSegment.empty()
             try:
                 audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
@@ -135,7 +138,7 @@ def app_sst():
                     continue
                 text = text['prediction']
                 if text['text']:
-                    text_list = [f"**Text {current_time}:** {text['text']}"] + text_list[:TOTAL_LINES - 1]
+                    text_list = [f"**Text {current_time}:** {text['text']}"] + text_list[:total_lines - 1]
                     text_output.markdown('\n\n'.join(reversed(text_list)))
         else:
             status_indicator.write("AudioReciver is not set. Abort.")
