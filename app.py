@@ -35,7 +35,7 @@ AUDIO_RECEIVER_SIZE = 2048
 # Change these
 #################
 TOTAL_LINES = 10
-TIME_TO_COLLECT_AUDIO = 2
+TIME_TO_COLLECT_AUDIO = 2.0
 
 logger = logging.getLogger(__name__)
 
