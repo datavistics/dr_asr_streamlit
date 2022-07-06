@@ -65,6 +65,7 @@ How to use:
 2. Configure the settings to your liking.
 3. Wait for the status to say `Running. Say something!`
     - If you get an error `No frame arrived.` you need to choose a different server
+    - Some servers are slow, it might take a minute to run!
 4. Start speaking!
 """
     )
